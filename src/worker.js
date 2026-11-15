@@ -27,6 +27,9 @@ import { current, fresh, play, restart } from "./logic.js";
 // back, so the link has to use the full one: then the browser itself finds it.
 const homeOf = (env) => `${env.PROFILE}#user-content-tic-tac-toe`;
 
+// The pictures and the redirects must never be cached: they are the game as it is now.
+const FRESH = { "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate" };
+
 /** Holds the one game. A Durable Object, so two clicks can never trample each other. */
 export class Game extends DurableObject {
   async #read() {
