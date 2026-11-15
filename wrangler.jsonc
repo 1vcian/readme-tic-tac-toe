@@ -1,0 +1,20 @@
+{
+  // A tic-tac-toe for a GitHub profile README. One Worker, one Durable Object
+  // that holds the board everyone plays on. Deploy with `npx wrangler deploy`.
+  // Making your own? Change "name" and the two "vars", then see README.md.
+  "name": "1vcian-tictactoe",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-08-15",
+  "workers_dev": true,
+  "vars": {
+    // The profile the board lives on: after a move, visitors are sent back here.
+    "PROFILE": "https://github.com/1vcian",
+    // Written in the corner of the caption under the board. Leave empty for none.
+    "SIGNATURE": "1vcian.me"
+  },
+  "preview_urls": false,
+  "durable_objects": {
+    "bindings": [{ "name": "GAME", "class_name": "Game" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Game"] }]
+}
