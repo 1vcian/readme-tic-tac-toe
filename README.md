@@ -6,7 +6,8 @@ A README cannot run code, but it can show pictures and follow links. So every sq
 
 - **One board for everyone.** The game lives in a Durable Object, and whoever visits plays on it. A game left alone for ten minutes starts over.
 - **You can win.** About one move in four the Worker plays any free square instead of the best one. It still takes a win and blocks a threat that is one move away, so beating it takes two threats at once. Someone who makes no mistakes wins about a third of the games.
-- **It lands on the board.** Anchors do not work on a profile page, so after a move the Worker sends you back with a text fragment (`#:~:text=`) pointing at a blank character under the board, shrunk to a pixel: the page scrolls there and nothing shows as highlighted.
+- **It lands on the board.** Anchors do not work on a profile page, so after a move the Worker sends you back with a text fragment (`#:~:text=`) pointing at a blank character under the board, shrunk far below a pixel: the page scrolls there and nothing shows as highlighted. The block is kept short on purpose: images higher up the README that load late push it down, and it has to stay on screen either way.
+- **Buttons that come and go.** "New game" and "Let me start" are pictures as well, so they are drawn only when they are on offer.
 - **No tracking, no accounts.** The only thing stored is the board and the score.
 
 ## Put one on your profile
@@ -30,7 +31,7 @@ Each view of the profile asks the Worker for ten pictures, and each move is one 
 | file | what it does |
 | --- | --- |
 | [`src/logic.js`](src/logic.js) | the rules and the opponent, as plain functions |
-| [`src/draw.js`](src/draw.js) | the pictures: the tiles and the caption |
+| [`src/draw.js`](src/draw.js) | the pictures: the tiles, the caption and the buttons |
 | [`src/worker.js`](src/worker.js) | the addresses, and the Durable Object that keeps the game |
 | [`snippet.mjs`](snippet.mjs) | prints the HTML for a README |
 | [`test/`](test) | `node --test` |

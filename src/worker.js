@@ -7,6 +7,9 @@
 //
 //   GET /cell/4.svg    the picture of square 4, as it is now
 //   GET /caption.svg   the line under the board
+//   GET /button/new.svg, /button/first.svg
+//                      "New game" and "Let me start": drawn when they are on
+//                      offer, one transparent pixel when they are not
 //   GET /play/4        you take square 4, I answer, back to the profile
 //   GET /new           a clean board            (/new?first=me and I open)
 //   GET /state         the game as JSON
@@ -15,7 +18,7 @@
 // Whose profile it is, and the name signed under the board, are set in wrangler.jsonc.
 
 import { DurableObject } from "cloudflare:workers";
-import { caption, tile } from "./draw.js";
+import { button, caption, tile } from "./draw.js";
 import { current, fresh, play, restart } from "./logic.js";
 
 // Back to the profile, scrolled to the board. Anchors do not work on a profile
@@ -69,6 +72,8 @@ export default {
     const cell = url.pathname.match(/^\/cell\/([0-8])\.svg$/);
     if (cell) return svg(tile(await game.view(), Number(cell[1])));
     if (url.pathname === "/caption.svg") return svg(caption(await game.view(), env.SIGNATURE));
+    const control = url.pathname.match(/^\/button\/(new|first)\.svg$/);
+    if (control) return svg(button(control[1], await game.view()));
 
     const move = url.pathname.match(/^\/play\/([0-8])$/);
     if (move) {

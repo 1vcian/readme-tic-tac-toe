@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { caption, captionText, tile } from "../src/draw.js";
+import { button, caption, captionText, offers, tile } from "../src/draw.js";
 import { EMPTY, SLIP, STALE_MS, current, free, fresh, isOver, play, put, reply, restart, winLine } from "../src/logic.js";
 
 const never = () => 0.999; // a random source that never makes me slip
@@ -81,6 +81,19 @@ test("when I start, I open with one move", () => {
   const game = restart(fresh(), 3, true, never);
   assert.equal([...game.board].filter((cell) => cell === "o").length, 1);
   assert.equal(game.board[game.last], "o");
+});
+
+test("the buttons show up only when they make sense", () => {
+  const clean = fresh();
+  const going = play(clean, 4, 1, never);
+  const over = { ...fresh(), board: "ooo_xx_x_", last: 2 };
+  assert.deepEqual([offers("new", clean), offers("first", clean)], [false, true]);
+  assert.deepEqual([offers("new", going), offers("first", going)], [false, false]);
+  assert.deepEqual([offers("new", over), offers("first", over)], [true, true]);
+  assert.match(button("new", going), /width="1" height="1"/);
+  assert.match(button("new", over), />New game<\/text>/);
+  assert.match(button("first", clean), />Let me start<\/text>/);
+  assert.match(button("nope", over), /width="1" height="1"/);
 });
 
 test("the pictures are well-formed and say the right thing", () => {
