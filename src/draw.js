@@ -69,11 +69,11 @@ export function button(kind, game) {
   if (!BUTTONS[kind] || !offers(kind, game)) return NOTHING;
   const [label, labelWidth, icon] = BUTTONS[kind];
   const body = 15 + 19 + 8 + labelWidth + 17;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${body + 9} 78" width="${body + 9}" height="78" role="img" aria-label="${label}">
-<rect x="6" y="22" width="${body}" height="38" rx="19" fill="${AMBER}"/>
-<rect x="2" y="18" width="${body}" height="38" rx="19" fill="${PAPER}" stroke="${INK}" stroke-width="3"/>
-<g transform="translate(16 27.5) scale(0.79)">${icon}</g>
-<text x="${2 + 15 + 19 + 8}" y="42.2" fill="${INK}" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="700" textLength="${labelWidth}" lengthAdjust="spacingAndGlyphs">${label}</text>
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${body + 9} 66" width="${body + 9}" height="66" role="img" aria-label="${label}">
+<rect x="6" y="16" width="${body}" height="38" rx="19" fill="${AMBER}"/>
+<rect x="2" y="12" width="${body}" height="38" rx="19" fill="${PAPER}" stroke="${INK}" stroke-width="3"/>
+<g transform="translate(16 21.5) scale(0.79)">${icon}</g>
+<text x="${2 + 15 + 19 + 8}" y="36.2" fill="${INK}" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="700" textLength="${labelWidth}" lengthAdjust="spacingAndGlyphs">${label}</text>
 </svg>`;
 }
 
@@ -83,11 +83,11 @@ const escape = (text) => String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;
 export function caption(game, signature = "") {
   const { headline, score } = captionText(game);
   const font = `font-family="Helvetica, Arial, sans-serif"`;
-  const signed = signature ? `\n<text x="496" y="62" fill="${INK}" ${font} text-anchor="end" font-size="11" font-weight="700" opacity="0.55">${escape(signature)}</text>` : "";
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 78" width="520" height="78" role="img" aria-label="${headline} ${score}">
-<rect x="7" y="7" width="509" height="67" rx="16" fill="${AMBER}"/>
-<rect x="2" y="2" width="509" height="67" rx="16" fill="${PAPER}" stroke="${INK}" stroke-width="3"/>
-<text x="256" y="29" fill="${INK}" ${font} text-anchor="middle" font-size="17" font-weight="700">${headline}</text>
-<text x="256" y="49" fill="${INK}" ${font} text-anchor="middle" font-size="13" opacity="0.75">${score}</text>${signed}
+  const signed = signature ? `\n<text x="498" y="51" fill="${INK}" ${font} text-anchor="end" font-size="10" font-weight="700" opacity="0.55">${escape(signature)}</text>` : "";
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 66" width="520" height="66" role="img" aria-label="${headline} ${score}">
+<rect x="7" y="7" width="509" height="55" rx="15" fill="${AMBER}"/>
+<rect x="2" y="2" width="509" height="55" rx="15" fill="${PAPER}" stroke="${INK}" stroke-width="3"/>
+<text x="256" y="25" fill="${INK}" ${font} text-anchor="middle" font-size="16" font-weight="700">${headline}</text>
+<text x="256" y="43" fill="${INK}" ${font} text-anchor="middle" font-size="12" opacity="0.75">${score}</text>${signed}
 </svg>`;
 }
