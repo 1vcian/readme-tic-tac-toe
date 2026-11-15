@@ -11,7 +11,9 @@
 //                      "New game" and "Let me start": drawn when they are on
 //                      offer, one transparent pixel when they are not
 //   GET /play/4        you take square 4, I answer, back to the profile
-//   GET /new           a clean board            (/new?first=me and I open)
+//   GET /new           a clean board, if the game is over (/new?first=me and I open)
+//   GET /tap           what the caption links to: a new game once this one is
+//                      over, otherwise it only brings you back to the board
 //   GET /state         the game as JSON
 //
 // There is one board, and everyone who visits plays on it.
@@ -83,8 +85,12 @@ export default {
       if (isVisitor(request)) await game.move(Number(move[1]));
       return home();
     }
-    if (url.pathname === "/new") {
-      if (isVisitor(request)) await game.reset(url.searchParams.get("first") === "me");
+    // A game that is being played is never wiped: if two people ask for a new
+    // game at once, the second finds it already started and is simply taken
+    // back to it. The Durable Object handles one request at a time, so the
+    // two can never both restart it.
+    if (url.pathname === "/new" || url.pathname === "/tap") {
+      if (isVisitor(request)) await game.reset(url.pathname === "/new" && url.searchParams.get("first") === "me");
       return home();
     }
     if (url.pathname === "/state") return Response.json(await game.view(), { headers: FRESH });

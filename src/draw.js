@@ -62,8 +62,8 @@ const BUTTONS = {
   first: ["Let me start", 88, `<path d="M8 5.5v13l10.5-6.5z" fill="${INK}" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>`],
 };
 
-/** Is this button on offer right now? A new game once this one is over; "let me start" also on a clean board. */
-export const offers = (kind, game) => isOver(game.board) || (kind === "first" && game.board === EMPTY);
+/** Is this button on offer right now? "New game" once a game is over, "Let me start" on a clean board, nothing in between. */
+export const offers = (kind, game) => (kind === "new" ? isOver(game.board) : game.board === EMPTY);
 
 /**
  * A button as tall as the caption, so they sit on one line: "New game" to its

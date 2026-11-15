@@ -83,7 +83,14 @@ test("a game in progress cannot be wiped", () => {
   assert.equal(restart(going, 2, true, never), going);
   let over = going;
   while (!isOver(over.board)) over = play(over, free(over.board)[0], 3, never);
-  assert.equal(restart(over, 4, false, never).board, EMPTY);
+  const again = restart(over, 4, false, never);
+  assert.equal(again.board, EMPTY);
+
+  // two people press "New game" at once: the second finds a clean board and changes nothing
+  assert.equal(restart(again, 5, false, never), again);
+  // or the first has already moved: the second is just taken back to that game
+  const moved = play(again, 0, 6, never);
+  assert.equal(restart(moved, 7, false, never), moved);
 });
 
 test("when I start, I open with one move", () => {
@@ -98,7 +105,8 @@ test("the buttons show up only when they make sense", () => {
   const over = { ...fresh(), board: "ooo_xx_x_", last: 2 };
   assert.deepEqual([offers("new", clean), offers("first", clean)], [false, true]);
   assert.deepEqual([offers("new", going), offers("first", going)], [false, false]);
-  assert.deepEqual([offers("new", over), offers("first", over)], [true, true]);
+  assert.deepEqual([offers("new", over), offers("first", over)], [true, false]);
+  assert.match(button("first", over), /width="158" height="66"\/>/, "the other side keeps its width, empty");
   assert.match(button("new", going), /width="1" height="1"/);
   assert.match(button("new", clean), /width="158" height="66"\/>/, "an empty placeholder keeps the caption centred");
   assert.match(button("new", over), />New game<\/text>/);

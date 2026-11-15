@@ -7,7 +7,8 @@ A README cannot run code, but it can show pictures and follow links. So every sq
 - **One board for everyone.** The game lives in a Durable Object, and whoever visits plays on it. A game left alone for ten minutes starts over.
 - **You can win.** About one move in four the Worker plays any free square instead of the best one. It still takes a win and blocks a threat that is one move away, so beating it takes two threats at once. Someone who makes no mistakes wins about a third of the games.
 - **It lands on the board.** After a move the Worker sends you back to an anchor placed just above the game. GitHub renames README anchors to `user-content-...` and, on a profile page, does not map the short name back, so the link uses the full name and the browser finds it by itself. The block is kept short on purpose: images higher up the README that load late push it down, and it has to stay on screen either way.
-- **Buttons that come and go.** "New game" and "Let me start" are pictures as well, so they are drawn only when they are on offer.
+- **Buttons that come and go.** "New game" and "Let me start" are pictures as well, so they are drawn only when they are on offer: the first once a game is over, the second on a clean board.
+- **Nobody wipes a game in progress.** If two people ask for a new game at the same moment, the Durable Object takes them one at a time: the second finds the game already restarted and is simply taken back to it.
 - **No tracking, no accounts.** The only thing stored is the board and the score.
 
 ## Put one on your profile

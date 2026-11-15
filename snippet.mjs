@@ -26,7 +26,7 @@ console.log(`<a name="tic-tac-toe"></a>
 <p>
 ${rows.join("<br>\n")}<br>
 <sub>You play X. There is one board, and everyone visiting plays on it.${more}</sub><br>
-<a href="${W}/new" title="New game"><img src="${W}/button/new.svg" alt="New game"></a> <a href="${W}/" title="Refresh the board"><img src="${W}/caption.svg" width="520" alt="The state of the game and the score so far"></a> <a href="${W}/new?first=me" title="New game, and I start"><img src="${W}/button/first.svg" alt="Let me start"></a>
+<a href="${W}/new" title="New game"><img src="${W}/button/new.svg" alt="New game"></a> <a href="${W}/tap"><img src="${W}/caption.svg" width="520" alt="The state of the game and the score so far"></a> <a href="${W}/new?first=me" title="New game, and I start"><img src="${W}/button/first.svg" alt="Let me start"></a>
 </p>
 
 </div>`);

@@ -79,9 +79,11 @@ export function current(game, now) {
 /**
  * A new game. With `iStart` I open. A game that is still being played is left
  * alone: one board is shared by everyone, and nobody gets to wipe it mid-game.
+ * So a second "new game" that arrives after the first one changes nothing.
  */
 export function restart(game, now, iStart = false, random = Math.random) {
   if (!isOver(game.board) && game.board !== EMPTY) return game;
+  if (game.board === EMPTY && !iStart) return game; // already clean
   const next = { ...fresh(game), at: now };
   if (iStart) {
     next.last = reply(EMPTY, random);
