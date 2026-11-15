@@ -6,7 +6,7 @@ const LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8],
 const TASTE = [4, 0, 2, 6, 8, 1, 3, 5, 7]; // centre, then corners, then edges
 
 /** A game nobody has touched for this long starts over for the next visitor. */
-export const STALE_MS = 10 * 60 * 1000;
+export const STALE_MS = 3 * 60 * 1000;
 
 export const free = (board) => [...board].flatMap((cell, i) => (cell === "_" ? [i] : []));
 export const put = (board, i, who) => board.slice(0, i) + who + board.slice(i + 1);
@@ -76,8 +76,12 @@ export function current(game, now) {
   return idle && game.board !== EMPTY ? { ...fresh(game), at: 0 } : game;
 }
 
-/** A new game. With `iStart` I open. */
+/**
+ * A new game. With `iStart` I open. A game that is still being played is left
+ * alone: one board is shared by everyone, and nobody gets to wipe it mid-game.
+ */
 export function restart(game, now, iStart = false, random = Math.random) {
+  if (!isOver(game.board) && game.board !== EMPTY) return game;
   const next = { ...fresh(game), at: now };
   if (iStart) {
     next.last = reply(EMPTY, random);

@@ -21,12 +21,11 @@ import { DurableObject } from "cloudflare:workers";
 import { button, caption, tile } from "./draw.js";
 import { current, fresh, play, restart } from "./logic.js";
 
-// Back to the profile, scrolled to the board. Anchors do not work on a profile
-// page, so this is a text fragment: the browser scrolls to a piece of text.
-// The README keeps a blank character (U+2800) under the board, shrunk to a
-// pixel, so the board lands in view and nothing shows as highlighted.
-const homeOf = (env) => `${env.PROFILE}#:~:text=%E2%A0%80`;
-const FRESH = { "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate" };
+// Back to the profile, scrolled to the game. The README has an anchor,
+// <a name="tic-tac-toe">, just above it. GitHub renames anchors in a README
+// to "user-content-...", and on a profile page it does not map the short name
+// back, so the link has to use the full one: then the browser itself finds it.
+const homeOf = (env) => `${env.PROFILE}#user-content-tic-tac-toe`;
 
 /** Holds the one game. A Durable Object, so two clicks can never trample each other. */
 export class Game extends DurableObject {
@@ -51,12 +50,13 @@ export class Game extends DurableObject {
   }
 }
 
-/** Only a person following a link moves a piece: not a crawler, not a link preview. */
+/**
+ * Only a person following a link moves a piece: not a crawler, not a link
+ * preview, not a script. Browsers say so themselves when a page is being
+ * opened (Sec-Fetch-Dest: document); anything that does not is ignored.
+ */
 function isVisitor(request) {
-  if (request.method !== "GET") return false;
-  const destination = request.headers.get("Sec-Fetch-Dest");
-  if (destination) return destination === "document";
-  return !/bot|crawl|spider|slurp|preview|fetch|curl|wget|monitor|camo|python|http/i.test(request.headers.get("User-Agent") ?? "");
+  return request.method === "GET" && request.headers.get("Sec-Fetch-Dest") === "document";
 }
 
 const svg = (body) => new Response(body, { headers: { "Content-Type": "image/svg+xml; charset=utf-8", ...FRESH } });

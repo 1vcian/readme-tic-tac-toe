@@ -77,6 +77,15 @@ test("an abandoned game is a clean board for the next visitor, with the score ke
   assert.equal(later.played, 7);
 });
 
+test("a game in progress cannot be wiped", () => {
+  const going = play(fresh(), 4, 1, never);
+  assert.equal(restart(going, 2, false, never), going);
+  assert.equal(restart(going, 2, true, never), going);
+  let over = going;
+  while (!isOver(over.board)) over = play(over, free(over.board)[0], 3, never);
+  assert.equal(restart(over, 4, false, never).board, EMPTY);
+});
+
 test("when I start, I open with one move", () => {
   const game = restart(fresh(), 3, true, never);
   assert.equal([...game.board].filter((cell) => cell === "o").length, 1);
@@ -91,6 +100,7 @@ test("the buttons show up only when they make sense", () => {
   assert.deepEqual([offers("new", going), offers("first", going)], [false, false]);
   assert.deepEqual([offers("new", over), offers("first", over)], [true, true]);
   assert.match(button("new", going), /width="1" height="1"/);
+  assert.match(button("new", clean), /width="158" height="66"\/>/, "an empty placeholder keeps the caption centred");
   assert.match(button("new", over), />New game<\/text>/);
   assert.match(button("first", clean), />Let me start<\/text>/);
   assert.match(button("nope", over), /width="1" height="1"/);

@@ -55,6 +55,7 @@ export function captionText(game) {
 // cannot hide a link, but a picture can be one transparent pixel.
 
 const NOTHING = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1" width="1" height="1"/>`;
+const BUTTON_WIDTH = 158; // both the same, so the caption between them stays in the middle
 const BUTTONS = {
   // label, width of the label in Helvetica bold 15, icon (drawn in a 24 x 24 box)
   new: ["New game", 67, `<path d="M19.5 12a7.5 7.5 0 1 1-2.3-5.4M17.5 3v4h-4" fill="none" stroke="${INK}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`],
@@ -64,16 +65,28 @@ const BUTTONS = {
 /** Is this button on offer right now? A new game once this one is over; "let me start" also on a clean board. */
 export const offers = (kind, game) => isOver(game.board) || (kind === "first" && game.board === EMPTY);
 
-/** A button as tall as the caption, so the two sit on one line. One transparent pixel when it is not on offer. */
+/**
+ * A button as tall as the caption, so they sit on one line: "New game" to its
+ * left, "Let me start" to its right. When neither is on offer each is one
+ * transparent pixel. When only one is, the other keeps its width but draws
+ * nothing, so the caption does not slide sideways.
+ */
 export function button(kind, game) {
-  if (!BUTTONS[kind] || !offers(kind, game)) return NOTHING;
+  if (!BUTTONS[kind]) return NOTHING;
+  if (!offers(kind, game)) {
+    const other = kind === "new" ? "first" : "new";
+    return offers(other, game) ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${BUTTON_WIDTH} 66" width="${BUTTON_WIDTH}" height="66"/>` : NOTHING;
+  }
   const [label, labelWidth, icon] = BUTTONS[kind];
   const body = 15 + 19 + 8 + labelWidth + 17;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${body + 9} 66" width="${body + 9}" height="66" role="img" aria-label="${label}">
-<rect x="6" y="16" width="${body}" height="38" rx="19" fill="${AMBER}"/>
-<rect x="2" y="12" width="${body}" height="38" rx="19" fill="${PAPER}" stroke="${INK}" stroke-width="3"/>
-<g transform="translate(16 21.5) scale(0.79)">${icon}</g>
-<text x="${2 + 15 + 19 + 8}" y="36.2" fill="${INK}" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="700" textLength="${labelWidth}" lengthAdjust="spacingAndGlyphs">${label}</text>
+  const left = (BUTTON_WIDTH - body - 5) / 2;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${BUTTON_WIDTH} 66" width="${BUTTON_WIDTH}" height="66" role="img" aria-label="${label}">
+<g transform="translate(${left} 0)">
+<rect x="5" y="16" width="${body}" height="38" rx="19" fill="${AMBER}"/>
+<rect x="1" y="12" width="${body}" height="38" rx="19" fill="${PAPER}" stroke="${INK}" stroke-width="3"/>
+<g transform="translate(15 21.5) scale(0.79)">${icon}</g>
+<text x="${1 + 15 + 19 + 8}" y="36.2" fill="${INK}" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="700" textLength="${labelWidth}" lengthAdjust="spacingAndGlyphs">${label}</text>
+</g>
 </svg>`;
 }
 
